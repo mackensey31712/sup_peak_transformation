@@ -3,10 +3,30 @@ import pandas as pd
 import os
 import sys
 from data_transformation import transform_csv_data
+import requests
+from streamlit_lottie import st_lottie
+
+# Function to load a lottie animation from a URL
+def load_lottieurl(url: str):
+    r = requests.get(url)
+    if r.status_code != 200:
+        return None
+    return r.json()
+
+# URL of the lottie animation
+url = 'https://lottie.host/f054323c-018b-4275-a775-e0e8f6a8c984/oV7bnpl8ZT.json'
+
+lottie_transformation = load_lottieurl(url)
 
 def main():
     st.set_page_config(page_title="Sup Peak Report Transformation", page_icon=":bar_chart:", layout="wide")
-    st.title("Sup Peak Report Transformation App")
+    # Center align 'five9 srr agent view'
+    st.markdown(
+        f"<h1 style='text-align: center;'>Sup Peak Report Transformation App</h1>",
+        unsafe_allow_html=True)
+    
+    st_lottie(lottie_transformation, speed=1, reverse=False, loop=True, quality="low", height=300, key=None)
+    
 
     # Check if the data_transformation.py file exists
     if not os.path.exists("data_transformation.py"):
@@ -14,7 +34,7 @@ def main():
         sys.exit(1)
 
     # Upload the .csv file
-    uploaded_file = st.sidebar.file_uploader("Upload a Sup Peak report in .csv file here", type="csv")
+    uploaded_file = st.sidebar.file_uploader("Upload a Sup Peak report in .csv format here", type="csv")
 
     if uploaded_file is not None:
         # Read the uploaded file
